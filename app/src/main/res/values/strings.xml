@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">BarcodeReader</string>
+    <string name="no_camera_devise">Camera devise not found</string>
+    <string name="get_barcode_info_failed">"Get barcode failed. Try again "</string>
+    <string name="tous_les_formats">Tous les formats</string>
+    <string name="seulement_les_codebars">Seulement les CodeBars</string>
+    <string name="seulement_les_code_qr">Seulement les code QR</string>
+</resources>
