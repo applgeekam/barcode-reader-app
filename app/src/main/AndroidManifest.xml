@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BarcodeReader">
-        <activity android:name=".CapturerPage"></activity>
+        <activity android:name=".ShowInfo"></activity>
+        <activity android:name=".CapturerPage" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

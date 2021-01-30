@@ -8,6 +8,8 @@
     android:padding="30dp"
     tools:context=".CapturerPage">
 
+<!--    Todo : ajoute un text pour guider sur la demarche a suivre-->
+
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="278dp"

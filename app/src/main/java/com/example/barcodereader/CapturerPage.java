@@ -1,6 +1,7 @@
 package com.example.barcodereader;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
@@ -14,11 +15,13 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Size;
 import android.widget.Toast;
 
@@ -32,6 +35,9 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.common.InputImage;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -39,9 +45,10 @@ import java.util.concurrent.Executor;
 
 public class CapturerPage extends AppCompatActivity {
 
-
+    final static int CODE = 2;
     Executor executor;
     int barcodeFormat;
+    boolean isDone;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -50,6 +57,7 @@ public class CapturerPage extends AppCompatActivity {
         setContentView(R.layout.activity_capturer_page);
 
         barcodeFormat = this.getIntent().getExtras().getInt("format");
+        isDone = false;
 
         initCamera();
     }
@@ -59,8 +67,7 @@ public class CapturerPage extends AppCompatActivity {
     {
         PreviewView previewView = findViewById(R.id.previewView);
 
-        ListenableFuture cameraProviderFuture =
-                ProcessCameraProvider.getInstance(this);
+        ListenableFuture cameraProviderFuture = ProcessCameraProvider.getInstance(this);
 
         executor = ContextCompat.getMainExecutor(this);
 
@@ -101,8 +108,7 @@ public class CapturerPage extends AppCompatActivity {
 
     public ImageAnalysis getImageAnalyser()
     {
-        ImageAnalysis imageAnalysis =
-                new ImageAnalysis.Builder()
+        ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
                         .setTargetResolution(new Size(1280, 720))
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build();
@@ -130,13 +136,17 @@ public class CapturerPage extends AppCompatActivity {
 
             Task<List<Barcode>> result = scanner.process((InputImage) image)
                     .addOnSuccessListener((OnSuccessListener<List<Barcode>>) barcodes -> {
-                        if (barcodes.size() > 0)
+                        if (barcodes.size() > 0 && !isDone)
                         {
-                            close(showBarcodeReader(barcodes));
+                            isDone = true;
+                            close(formatBarcodeToRead(barcodes));
                         }
                         imageProxy.close();
                     })
-                    .addOnFailureListener((OnFailureListener) e -> {Toast.makeText(getApplicationContext(), R.string.get_barcode_info_failed, Toast.LENGTH_LONG).show(); imageProxy.close();});
+                    .addOnFailureListener((OnFailureListener) e -> {
+                        Toast.makeText(getApplicationContext(), R.string.get_barcode_info_failed, Toast.LENGTH_LONG).show();
+                        imageProxy.close();
+                    });
 
         }
 
@@ -144,36 +154,54 @@ public class CapturerPage extends AppCompatActivity {
     }
 
 
-    public void close(String message)
+    public void close(ArrayList result)
     {
-        this.getIntent().putExtra("result", message);
-        setResult(2, this.getIntent());
-        finish();
+
+        Intent intent = new Intent(getApplicationContext(), ShowInfo.class);
+        intent.putExtra("list", result);
+        startActivityForResult(intent, CODE);
+
     }
 
-    public String showBarcodeReader(List<Barcode> barcodes)
+    public ArrayList<HashMap<String, String>> formatBarcodeToRead(List<Barcode> barcodes)
     {
-//        for (Barcode barcode: barcodes) {
-//            Rect bounds = barcode.getBoundingBox();
-//            Point[] corners = barcode.getCornerPoints();
-//
-//            String rawValue = barcode.getRawValue();
-//
-//            int valueType = barcode.getValueType();
-//            // See API reference for complete list of supported types
-//            switch (valueType) {
-//                case Barcode.TYPE_WIFI:
-//                    String ssid = barcode.getWifi().getSsid();
-//                    String password = barcode.getWifi().getPassword();
-//                    int type = barcode.getWifi().getEncryptionType();
-//                    break;
-//                case Barcode.TYPE_URL:
-//                    String title = barcode.getUrl().getTitle();
-//                    String url = barcode.getUrl().getUrl();
-//                    break;
-//            }
-//        }
-        return String.valueOf(barcodes.size());
+        ArrayList<HashMap<String, String>> defaultList = new ArrayList<HashMap<String, String>>();
+        for (Barcode barcode: barcodes) {
+            int valueType = barcode.getValueType();
+            HashMap<String, String> item= new HashMap<String, String>();
+            switch (valueType) {
+                case Barcode.TYPE_WIFI:
+                    item.put("type", "WIFI");
+                    item.put("ssid", barcode.getWifi().getSsid());
+                    item.put("password", barcode.getWifi().getPassword());
+                    item.put("encryption", String.valueOf(barcode.getWifi().getEncryptionType()));
+                    break;
+                case Barcode.TYPE_URL:
+                    item.put("type", "URL");
+                    item.put("title", barcode.getUrl().getTitle());
+                    item.put("url", barcode.getUrl().getUrl());
+                    break;
+                default:
+//                    Todo : show the correct value type
+                    item.put("type", "DEFAULT");
+                    item.put("value", barcode.getDisplayValue());
+                    item.put("encoded", barcode.getRawValue());
+                    break;
+            }
+            defaultList.add(item);
+        }
+
+        return defaultList;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CODE)
+        {
+            isDone = false;
+            Log.i("Activity", "onActivityResult: Back to camera view");
+        }
     }
 
 
