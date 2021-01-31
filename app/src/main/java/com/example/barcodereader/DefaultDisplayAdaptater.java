@@ -1,10 +1,14 @@
 package com.example.barcodereader;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -42,6 +46,15 @@ public class DefaultDisplayAdaptater extends AbstractAdapater {
             title.setText(item.get("title"));
             TextView url = (TextView) convertView.findViewById(R.id.url_item_link_value);
             url.setText(item.get("url"));
+            Button btnOpen = (Button) convertView.findViewById(R.id.url_item_btn_open);
+            btnOpen.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Uri url = Uri.parse(item.get("url"));
+                    Intent intent = new Intent(Intent.ACTION_VIEW, url);
+                    ActivityContext.startActivity(intent);
+                }
+            });
         }
         else {
             convertView = inflater.inflate(R.layout.default_list,  parent, false);

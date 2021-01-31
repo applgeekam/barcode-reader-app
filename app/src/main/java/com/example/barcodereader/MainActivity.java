@@ -40,27 +40,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CapturerPage.class);
+
                 switch (radioformatGroup.getCheckedRadioButtonId())
                 {
                     case R.id.radioQR:
                         intent.putExtra("format", Barcode.FORMAT_QR_CODE);
-                        startActivityForResult(intent, CODE);
-
                         break;
                     case R.id.radioCB:
                         intent.putExtra("format", Barcode.FORMAT_CODABAR);
-                        startActivityForResult(intent, CODE);
-
                         break;
                     case R.id.radioAll:
                         intent.putExtra("format", Barcode.FORMAT_ALL_FORMATS);
-                        startActivityForResult(intent, CODE);
-
                         break;
-                    default:
-                        break;
-
                 }
+                startActivityForResult(intent, CODE);
 
 
             }
@@ -79,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == CODE)
         {
             try {
-//                message.setText(data.getExtras().getString("result"));
                 Log.i("result", data.getExtras().getString("result"));
             }catch (Exception e){
 
@@ -90,17 +82,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("Error", "onActivityResult: " + e.toString());
 
             }
-        }
-    }
-
-    /** Check if this device has a camera */
-    private boolean checkCameraHardware() {
-        if (getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
-            // this device has a camera
-            return true;
-        } else {
-            // no camera on this device
-            return false;
         }
     }
 
