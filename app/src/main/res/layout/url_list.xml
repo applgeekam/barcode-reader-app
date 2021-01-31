@@ -29,7 +29,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:layout_weight="0.22"
-                android:text="Type : "
+                android:text="Content Type : "
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -123,6 +123,8 @@
                 android:id="@+id/url_item_btn_open"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:backgroundTint="#DF3700B3"
+                android:textColor="@color/white"
                 android:text="Open"
                 />
         </LinearLayout>

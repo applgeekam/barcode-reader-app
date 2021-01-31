@@ -20,6 +20,7 @@
         android:layout_marginBottom="200dp"
         android:gravity="center_horizontal"
         android:text="Barcode Reader"
+        android:textColor="@color/black"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -29,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-<!--    Todo : ameliore UI-->
+
     <Button
         android:id="@+id/btnStart"
         android:layout_width="193dp"
@@ -37,7 +38,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="184dp"
+        android:layout_marginBottom="130dp"
         android:text="Capture"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,6 +48,7 @@
         android:id="@+id/radioFormatGroup"
         android:layout_width="324dp"
         android:layout_height="140dp"
+        android:layout_marginBottom="30dp"
         app:layout_constraintBottom_toTopOf="@+id/btnStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -81,7 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:layout_marginBottom="41dp"
-        android:text="Choissisez le format du BarCode a scanner : "
+        android:text="Choissisez le format du BarCode à scanner : "
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/radioFormatGroup"
         app:layout_constraintEnd_toEndOf="parent"

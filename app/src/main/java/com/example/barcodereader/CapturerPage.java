@@ -171,19 +171,18 @@ public class CapturerPage extends AppCompatActivity {
             HashMap<String, String> item= new HashMap<String, String>();
             switch (valueType) {
                 case Barcode.TYPE_WIFI:
-                    item.put("type", "WIFI");
+                    item.put("type", getBardcodeTypeInString(valueType));
                     item.put("ssid", barcode.getWifi().getSsid());
                     item.put("password", barcode.getWifi().getPassword());
                     item.put("encryption", String.valueOf(barcode.getWifi().getEncryptionType()));
                     break;
                 case Barcode.TYPE_URL:
-                    item.put("type", "URL");
+                    item.put("type", getBardcodeTypeInString(valueType));
                     item.put("title", barcode.getUrl().getTitle());
                     item.put("url", barcode.getUrl().getUrl());
                     break;
                 default:
-//                    Todo : show the correct value type
-                    item.put("type", "DEFAULT");
+                    item.put("type", getBardcodeTypeInString(valueType));
                     item.put("value", barcode.getDisplayValue());
                     item.put("encoded", barcode.getRawValue());
                     break;
@@ -201,6 +200,38 @@ public class CapturerPage extends AppCompatActivity {
         {
             isDone = false;
             Log.i("Activity", "onActivityResult: Back to camera view");
+        }
+    }
+
+    public String getBardcodeTypeInString(int type)
+    {
+        switch (type)
+        {
+            case Barcode.TYPE_CALENDAR_EVENT:
+                return "Evénements de calendrier";
+            case Barcode.TYPE_CONTACT_INFO:
+                return "Contact";
+            case Barcode.TYPE_EMAIL:
+                return "Email";
+            case Barcode.TYPE_ISBN:
+                return "Numéro international normalisé du livre ISBN";
+            case Barcode.TYPE_PHONE:
+                return "Numéro de téléphone";
+            case Barcode.TYPE_SMS:
+                return "SMS";
+            case Barcode.TYPE_TEXT:
+                return "Texte";
+            case Barcode.TYPE_URL:
+                return "URL";
+            case Barcode.TYPE_WIFI:
+                return "Wifi";
+            case Barcode.TYPE_GEO:
+                return "Coordonnée géographique";
+            case Barcode.TYPE_DRIVER_LICENSE:
+                return "Permis de conduire";
+            default:
+                return "Inconnue";
+
         }
     }
 
