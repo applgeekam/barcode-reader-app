@@ -39,6 +39,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
@@ -180,6 +181,11 @@ public class CapturerPage extends AppCompatActivity {
                     item.put("type", getBardcodeTypeInString(valueType));
                     item.put("title", barcode.getUrl().getTitle());
                     item.put("url", barcode.getUrl().getUrl());
+                    break;
+                case Barcode.TYPE_GEO:
+                    item.put("type", getBardcodeTypeInString(valueType));
+                    item.put("long", String.valueOf(Objects.requireNonNull(barcode.getGeoPoint()).getLng()));
+                    item.put("lat", String.valueOf(Objects.requireNonNull(barcode.getGeoPoint()).getLat()));
                     break;
                 default:
                     item.put("type", getBardcodeTypeInString(valueType));

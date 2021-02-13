@@ -56,6 +56,16 @@ public class DefaultDisplayAdaptater extends AbstractAdapater {
                 }
             });
         }
+        else if(Objects.equals(item.get("type"), "Coordonnée géographique"))
+        {
+            convertView = inflater.inflate(R.layout.geo_list,  parent, false);
+            TextView type = (TextView) convertView.findViewById(R.id.geo_item_type_value);
+            type.setText(item.get("type"));
+            TextView latitude = (TextView) convertView.findViewById(R.id.geo_item_latitude_value);
+            latitude.setText(item.get("lat"));
+            TextView longitude = (TextView) convertView.findViewById(R.id.geo_item_longitude_value);
+            longitude.setText(item.get("long"));
+        }
         else {
             convertView = inflater.inflate(R.layout.default_list,  parent, false);
             TextView type = (TextView) convertView.findViewById(R.id.default_item_type_value);

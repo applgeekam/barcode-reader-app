@@ -36,7 +36,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pointez votre appareil photo vers votre code-barres pour le capturer. Attendez que la visibilité se stabilise correctement."
+        android:text="Pointez votre appareil photo vers votre code-barre pour le capturer. Attendez que la visibilité se stabilise correctement."
         android:textAlignment="center"
         android:textSize="16sp"
         android:layout_marginBottom="30dp"
